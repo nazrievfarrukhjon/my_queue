@@ -47,8 +47,6 @@ Route::namespace('Api')->group(function () {
         Route::post('/reception', [ReceptionController::class, 'store']);
         Route::post('/reception/skip-all', [ReceptionController::class, 'skipAll']);
 
-        Route::get('/monitor/', [MonitorController::class, 'index']);
-
         Route::get('/users', [UsersController::class, 'index']);
         Route::get('/users/{user}', [UsersController::class, 'show'])->where('user', '[0-9]+');
         Route::post('/users', [UsersController::class, 'store']);
@@ -86,12 +84,19 @@ Route::namespace('Api')->group(function () {
         Route::put('/service-centers/{serviceCenter}', [ServiceCenterController::class, 'update']);
         Route::delete('/service-centers/{serviceCenter}', [ServiceCenterController::class, 'destroy']);
 
-        Route::post('/terminals/register', [\App\Http\Controllers\TerminalController::class, 'register']);
     });
+    Route::post('/terminals/register', [\App\Http\Controllers\TerminalController::class, 'register']);
 
     Route::middleware('auth_terminal')->group(function() {
-        Route::prefix('/queues')->group(function () {
-            Route::get('/', [\App\Http\Controllers\QueueController::class, 'getByTerminalId']);
+        Route::prefix('/monitors')->group(function () {
+            Route::get('/', [MonitorController::class, 'index']);
+
+            Route::get('/', [MonitorController::class, 'getByMonitorId']);
+
+        });
+
+        Route::prefix('/tickets')->group(function () {
+            Route::post('/', [\App\Http\Controllers\Api\TicketsController::class, 'create']);
         });
     });
 

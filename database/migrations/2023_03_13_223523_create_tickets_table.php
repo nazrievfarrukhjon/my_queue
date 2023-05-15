@@ -19,7 +19,8 @@ return new class extends Migration
             $table->text('comment')->nullable();
             $table->integer('priority')->default(0);
             $table->bigInteger('service_id')->unsigned();
-            $table->integer('status_id')->unsigned();
+            //pending status 1
+            $table->integer('status_id')->default(1)->unsigned();
             $table->bigInteger('user_id')->nullable()->unsigned();
             $table->timestamp('created_at');
             $table->timestamp('invited_at')->nullable();
@@ -30,6 +31,8 @@ return new class extends Migration
             $table->foreign('status_id')->references('id')->on('statuses');
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('client_id')->references('id')->on('clients');
+
+            $table->foreignId('monitor_id')->index();
         });
     }
 

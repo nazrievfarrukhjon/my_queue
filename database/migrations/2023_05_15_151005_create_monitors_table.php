@@ -6,18 +6,19 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+
     public function up(): void
     {
-        Schema::create('queues', function (Blueprint $table) {
+        Schema::create('monitors', function (Blueprint $table) {
             $table->id();
-            $table->integer('terminal_id');
-            $table->integer('ticket_id');
-            $table->timestamps();
+            $table->integer('counter')->default(0);
+            $table->string('group', 100);
+            $table->string('name', 100);
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('queues');
+        Schema::dropIfExists('monitors');
     }
 };

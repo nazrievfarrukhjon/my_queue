@@ -16,7 +16,7 @@ class AuthTerminal
 
         if (!$staticToken) {
             $terminal = Terminal::where('terminal_uuid', $request->terminal_uuid)->first();
-            $staticToken = $terminal->token;
+            $staticToken = $terminal?->token;
             Cache::forever('terminal_uuid', $staticToken);
         }
 

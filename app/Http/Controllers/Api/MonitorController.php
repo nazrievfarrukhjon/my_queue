@@ -12,10 +12,7 @@ use Illuminate\Http\Response;
 
 class MonitorController extends Controller
 {
-    /**
-     * @param Request $request
-     * @return Application|ResponseFactory|Response
-     */
+
     public function index(Request $request): Application|ResponseFactory|Response
     {
         $tickets = Ticket::query()
@@ -26,4 +23,14 @@ class MonitorController extends Controller
 
         return $this->response($tickets);
     }
+
+    public function getByMonitorId(Request $request)
+    {
+        $tickets = Ticket::query()
+            ->where('monitor_id', $request->monitor_id)
+            ->get();
+
+        return $this->response($tickets);
+    }
+
 }

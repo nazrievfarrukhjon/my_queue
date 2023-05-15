@@ -10,7 +10,6 @@ return new class extends Migration
     {
         Schema::create('terminals', function (Blueprint $table) {
             $table->uuid('terminal_uuid')->unique();
-            $table->string('name');
             $table->string('token');
         });
     }
