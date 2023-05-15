@@ -85,7 +85,16 @@ Route::namespace('Api')->group(function () {
         Route::post('/service-centers', [ServiceCenterController::class, 'store']);
         Route::put('/service-centers/{serviceCenter}', [ServiceCenterController::class, 'update']);
         Route::delete('/service-centers/{serviceCenter}', [ServiceCenterController::class, 'destroy']);
+
+        Route::post('/terminals/register', [\App\Http\Controllers\TerminalController::class, 'register']);
     });
+
+    Route::middleware('auth_terminal')->group(function() {
+        Route::prefix('/queues')->group(function () {
+            Route::get('/', [\App\Http\Controllers\QueueController::class, 'getByTerminalId']);
+        });
+    });
+
 });
 
 //Route::fallback([HomeController::class, 'fallback']);

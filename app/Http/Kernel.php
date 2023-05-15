@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\{Authenticate,
+    AuthTerminal,
     CanAdmin,
     EncryptCookies,
     PermissionMiddleware,
@@ -89,6 +90,7 @@ class Kernel extends HttpKernel
         'admin' => CanAdmin::class,
         'perm' => PermissionMiddleware::class,
         'abilities' => CheckAbilities::class,
-        'ability' => CheckForAnyAbility::class
+        'ability' => CheckForAnyAbility::class,
+        'auth_terminal' => AuthTerminal::class,
     ];
 }
