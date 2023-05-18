@@ -76,21 +76,21 @@ class Kernel extends HttpKernel
      * @var array<string, class-string|string>
      */
     protected $routeMiddleware = [
-        'auth' => Authenticate::class,
-        'auth.basic' => AuthenticateWithBasicAuth::class,
-        'auth.session' => AuthenticateSession::class,
-        'cache.headers' => SetCacheHeaders::class,
-        'can' => Authorize::class,
-        'guest' => RedirectIfAuthenticated::class,
-        'password.confirm' => RequirePassword::class,
-        'signed' => ValidateSignature::class,
-        'throttle' => ThrottleRequests::class,
-        'verified' => EnsureEmailIsVerified::class,
-
-        'admin' => CanAdmin::class,
-        'perm' => PermissionMiddleware::class,
-        'abilities' => CheckAbilities::class,
-        'ability' => CheckForAnyAbility::class,
         'auth_terminal' => AuthTerminal::class,
+        //'auth' => Authenticate::class,
+        //'auth.basic' => AuthenticateWithBasicAuth::class,
+        //'auth.session' => AuthenticateSession::class,
+        //'cache.headers' => SetCacheHeaders::class,
+        //'can' => Authorize::class,
+       // 'guest' => RedirectIfAuthenticated::class,
+        //'password.confirm' => RequirePassword::class,
+        //'signed' => ValidateSignature::class,
+        'throttle' => ThrottleRequests::class,
+        //'verified' => EnsureEmailIsVerified::class,
+
+//        'admin' => CanAdmin::class,
+  //      'perm' => PermissionMiddleware::class,
+    //    'abilities' => CheckAbilities::class,
+      //  'ability' => CheckForAnyAbility::class,
     ];
 }

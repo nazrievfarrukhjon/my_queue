@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Monitor extends Model
+class MonitorGroups extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'name',
-        'group',
-        'counter'
+        'series',
+        'queue_number',
     ];
 
     public $timestamps = false;

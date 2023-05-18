@@ -18,7 +18,8 @@ class Ticket extends Model
         'status_id',
         'client_id',
         'user_id',
-        'created_at'
+        'created_at',
+        'monitor_group_id'
     ];
 
     public function service(): BelongsTo

@@ -29,7 +29,21 @@ return [
     */
 
     'connections' => [
-
+        'default' => 'echo',
+        'echo' => [
+            'driver' => 'pusher',
+            'key' => env('PUSHER_APP_KEY'),
+            'secret' => env('PUSHER_APP_SECRET'),
+            'app_id' => env('PUSHER_APP_ID'),
+            'options' => [
+                'host' => 'localhost',
+                'port' => 6001,
+                'scheme' => 'http',
+                'encrypted' => false,
+                'cluster' => 'mt1', // Update with your cluster name
+                'useTLS' => false,
+            ],
+        ],
         'pusher' => [
             'driver' => 'pusher',
             'key' => env('PUSHER_APP_KEY'),
