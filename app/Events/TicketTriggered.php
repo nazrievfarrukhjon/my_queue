@@ -14,7 +14,7 @@ class TicketTriggered implements ShouldBroadcast
     public function __construct($tickets)
     {
         $this->tickets = $tickets;
-        $this->monitor_group_id = $this->tickets->first()?->monitor_group_id;
+        $this->monitor_group_id = $this->tickets->firstOrFail()?->monitor_group_id;
     }
 
     public function broadcastOn()

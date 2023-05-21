@@ -1,12 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\HomeController;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\{
-    ForgotPasswordController,
-    RegisterController,
-    ResetPasswordController,
-    VerificationController};
+use App\Http\Controllers\Api\{AuthController, MonitorController, ServiceCenterController, TicketsController,
+    DeviceController, MonitorGroupController};
 use App\Http\Controllers\Api\Admin\{CabinetController,
     ClientsController,
     ProfileController,
@@ -14,7 +10,11 @@ use App\Http\Controllers\Api\Admin\{CabinetController,
     ServiceCategoryController,
     ServicesController,
     UsersController};
-use App\Http\Controllers\Api\{AuthController, MonitorController, ServiceCenterController, TicketsController};
+use App\Http\Controllers\Auth\{ForgotPasswordController,
+    RegisterController,
+    ResetPasswordController,
+    VerificationController};
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return 'Queue system service';
@@ -40,7 +40,7 @@ Route::namespace('Api')->group(function () {
         Route::post('/email/resend', [VerificationController::class, 'resend']);
     });
 
-    Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+    Route::group([], function () {
         Route::get('/home', [HomeController::class, 'index']);
 
         Route::get('/reception', [ReceptionController::class, 'index']);
@@ -84,25 +84,53 @@ Route::namespace('Api')->group(function () {
         Route::put('/service-centers/{serviceCenter}', [ServiceCenterController::class, 'update']);
         Route::delete('/service-centers/{serviceCenter}', [ServiceCenterController::class, 'destroy']);
 
-        //device registration
-        Route::post('/device/register', [\App\Http\Controllers\DeviceController::class, 'register']);
+        //devices
+        Route::prefix('devices')->group(function () {
+            Route::get('/', [DeviceController::class, 'get']);
+            Route::post('/', [DeviceController::class, 'create']);
+            Route::put('/{uuid}', [DeviceController::class, 'update']);
+            Route::delete('/{uuid}', [DeviceController::class, 'delete']);
+        });
 
-        //tickets
-        Route::put('/{id}', [TicketsController::class, 'update']);
-        Route::delete('/{id}', [TicketsController::class, 'delete']);
-        Route::get('/', [TicketsController::class, 'getAll']);
-        Route::get('/{id}', [TicketsController::class, 'getById']);
-        Route::get('/{status_id}', [TicketsController::class, 'getByStatusId']);
-        Route::get('/{user_id}', [TicketsController::class, 'getByUserId']);
+        //devices
+        Route::prefix('monitor_groups')->group(function () {
+            Route::get('/', [MonitorGroupController::class, 'get']);
+            Route::post('/', [MonitorGroupController::class, 'create']);
+            Route::put('/{id}', [MonitorGroupController::class, 'update']);
+            Route::delete('/{id}', [MonitorGroupController::class, 'delete']);
+        });
+
+        //these ticket routes are for administrating {serving ticket, removing updating etc}
+        Route::prefix('/tickets')->group(function () {
+            Route::get('/', [TicketsController::class, 'getAll']);
+            Route::prefix('by')->group(function () {
+                Route::get('/ticket_id/{id}', [TicketsController::class, 'getById']);
+                Route::get('/status_id/{id}', [TicketsController::class, 'getByStatusId']);
+                Route::get('user_id/{id}', [TicketsController::class, 'getByUserId']);
+            });
+
+            Route::put('/{id}', [TicketsController::class, 'update']);
+            Route::delete('/{id}', [TicketsController::class, 'delete']);
+        });
+
     });
 
     Route::middleware('auth_device')->group(function() {
+        //these routes for devices like monitors
         Route::prefix('/monitors')->group(function () {
-            Route::get('/', [MonitorController::class, 'index']);
+            Route::get('/', [MonitorController::class, 'getInvitedTickets']);
 
-            Route::get('/', [MonitorController::class, 'getByMonitorId']);
+            Route::get('/{monitor_group_id}', [MonitorController::class, 'getByMonitorGroupId']);
+
+            Route::get('/{status_id}', [MonitorController::class, 'getTicketsByStatusId']);
+
+            Route::get('/by/statuses', [MonitorController::class, 'getTicketsByStatuses']);
+
+            Route::get('/by/statuses/monitor_groups', [MonitorController::class, 'getTicketsByStatuses']);
+
         });
 
+        //this route only for creatingticket from some device
         Route::prefix('/tickets')->group(function () {
             Route::post('/', [TicketsController::class, 'create']);
         });

@@ -1,3 +1,4 @@
+## the entity ticket in this project used like queue entity
 
 ## Project Installation Rule
 

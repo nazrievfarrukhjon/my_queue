@@ -15,10 +15,10 @@ class TicketsController extends Controller
 {
    public function create(TicketStoreFormRequest $request): JsonResponse
    {
-       $client = Client::where('phone', $request->phone)->first();
+       $client = Client::where('phone', $request->phone)->firstOrFail();
        $service = Service::find($request->service_id);
 
-       $monitorGroup = MonitorGroups::where('name', $request->monitor_group_name)->first();
+       $monitorGroup = MonitorGroups::where('name', $request->monitor_group_name)->firstOrFail();
        $monitorGroup->queue_number++;
        $monitorGroup->save();
 
@@ -39,7 +39,7 @@ class TicketsController extends Controller
 
     public function update(int $id, Request $request): JsonResponse
     {
-        $ticket = Ticket::whereId($id)->first();
+        $ticket = Ticket::whereId($id)->firstOrFail();
 
         return response()->json(
             [$ticket->update($request->all())],
@@ -63,21 +63,21 @@ class TicketsController extends Controller
     public function getById(int $id, Request $request): JsonResponse
     {
         return response()->json([
-            Ticket::whereId($id)->first()
+            Ticket::whereId($id)->firstOrFail()
         ] , 200);
     }
 
     public function getByStatusId(int $statusId, Request $request): JsonResponse
     {
         return response()->json([
-            Ticket::whereStatusId($statusId)->first()
+            Ticket::whereStatusId($statusId)->firstOrFail()
         ] , 200);
     }
 
     public function getByUserId(int $userId, Request $request): JsonResponse
     {
         return response()->json([
-            Ticket::whereUserId($userId)->first()
+            Ticket::whereUserId($userId)->firstOrFail()
         ] , 200);
     }
 

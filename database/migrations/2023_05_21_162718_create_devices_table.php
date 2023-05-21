@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('devices', function (Blueprint $table) {
+            $table->id();
             $table->uuid('device_uuid')->unique();
             $table->string('token');
             $table->string('type', 50)->nullable();

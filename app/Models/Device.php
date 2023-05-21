@@ -11,8 +11,8 @@ class Device extends Model
 
     protected $fillable = [
         'device_uuid',
-        'name',
         'token',
+        'type'
     ];
 
     public $timestamps = false;

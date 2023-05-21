@@ -117,30 +117,4 @@ class MonitorController extends Controller
         return view('monitor.index-90', compact('categories', 'users'));
     }
 
-    public function createMonitorGroup(Request $request)
-    {
-        return MonitorGroups::create([
-            'name' => $request->name,
-            'series' => $request->series,
-        ]);
-    }
-
-    public function updateMonitorGroupById(Request $request)
-    {
-        $monitorGroup = MonitorGroups::whereId($request->id)->first();
-        $monitorGroup->name;
-        $monitorGroup->series;
-
-        return $monitorGroup->update();
-    }
-
-    public function deleteMonitorGroupById(Request $request)
-    {
-        MonitorGroups::whereId($request->id)->delete();
-    }
-
-    public function getMonitorGroups(Request $request)
-    {
-        return MonitorGroups::all();
-    }
 }

@@ -2,19 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
-
 use App\Enums\Status;
 use App\Http\Controllers\Controller;
 use App\Models\Ticket;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class MonitorController extends Controller
 {
 
-    public function index(Request $request): Application|ResponseFactory|Response
+    public function getInvitedTickets(): JsonResponse
     {
         $tickets = Ticket::query()
             ->with(['user', 'status'])
@@ -22,16 +19,16 @@ class MonitorController extends Controller
             ->whereNotNull('invited_at')
             ->get();
 
-        return $this->response($tickets);
+        return response()->json($tickets);
     }
 
-    public function getByMonitorId(Request $request)
+    public function getByMonitorGroupId(Request $request)
     {
         $tickets = Ticket::query()
             ->where('monitor_group_id', $request->monitor_group_id)
             ->get();
 
-        return $this->response($tickets);
+        return response()->json($tickets);
     }
 
 }
