@@ -40,7 +40,7 @@ Route::namespace('Api')->group(function () {
         Route::post('/email/resend', [VerificationController::class, 'resend']);
     });
 
-    Route::group([], function () {
+    Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::get('/home', [HomeController::class, 'index']);
 
         Route::get('/reception', [ReceptionController::class, 'index']);
@@ -103,12 +103,7 @@ Route::namespace('Api')->group(function () {
         //these ticket routes are for administrating {serving ticket, removing updating etc}
         Route::prefix('/tickets')->group(function () {
             Route::get('/', [TicketsController::class, 'getAll']);
-            Route::prefix('by')->group(function () {
-                Route::get('/ticket_id/{id}', [TicketsController::class, 'getById']);
-                Route::get('/status_id/{id}', [TicketsController::class, 'getByStatusId']);
-                Route::get('user_id/{id}', [TicketsController::class, 'getByUserId']);
-            });
-
+            Route::get('/{id}', [TicketsController::class, 'getById']);
             Route::put('/{id}', [TicketsController::class, 'update']);
             Route::delete('/{id}', [TicketsController::class, 'delete']);
         });
@@ -120,17 +115,10 @@ Route::namespace('Api')->group(function () {
         Route::prefix('/monitors')->group(function () {
             Route::get('/', [MonitorController::class, 'getInvitedTickets']);
 
-            Route::get('/{monitor_group_id}', [MonitorController::class, 'getByMonitorGroupId']);
-
-            Route::get('/{status_id}', [MonitorController::class, 'getTicketsByStatusId']);
-
-            Route::get('/by/statuses', [MonitorController::class, 'getTicketsByStatuses']);
-
-            Route::get('/by/statuses/monitor_groups', [MonitorController::class, 'getTicketsByStatuses']);
-
+            Route::get('/', [MonitorController::class, 'getByMonitorGroupId']);
         });
 
-        //this route only for creatingticket from some device
+        //this route only for creating ticket from devices
         Route::prefix('/tickets')->group(function () {
             Route::post('/', [TicketsController::class, 'create']);
         });

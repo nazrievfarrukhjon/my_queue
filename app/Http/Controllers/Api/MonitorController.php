@@ -22,13 +22,43 @@ class MonitorController extends Controller
         return response()->json($tickets);
     }
 
-    public function getByMonitorGroupId(Request $request)
+    public function getByMonitorGroupId(Request $request): JsonResponse
     {
-        $tickets = Ticket::query()
-            ->where('monitor_group_id', $request->monitor_group_id)
-            ->get();
+        $tickets = Ticket::query();
 
-        return response()->json($tickets);
+        if (isset($request->priority))
+            $tickets->wherePriority($request->priority);
+
+        if (isset($request->service_id))
+            $tickets->whereServiceId($request->service_id);
+
+        if (isset($request->status_id))
+            $tickets->whereStatusId($request->status_id);
+
+        if (isset($request->user_id))
+            $tickets->whereUserId($request->user_id);
+
+        if (isset($request->created_at))
+            $tickets->whereCreatedAt($request->created_at);
+
+        if (isset($request->invited_at))
+            $tickets->whereInvitedAt($request->invited_at);
+
+        if (isset($request->completed_at))
+            $tickets->whereCompletedAt($request->completed_at);
+
+        if (isset($request->client_id))
+            $tickets->whereClientId($request->client_id);
+
+        if (isset($request->monitor_group_id))
+            $tickets->whereMonitorGroupId($request->monitor_group_id);
+
+
+        return response()->json([
+            'tickets' => $tickets
+                ->limit(7)
+                ->get(),
+        ] , 200);
     }
 
 }

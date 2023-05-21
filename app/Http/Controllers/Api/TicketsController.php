@@ -53,31 +53,46 @@ class TicketsController extends Controller
 
     public function getAll(Request $request): JsonResponse
     {
-        $tickets = Ticket::paginate(10);
+        $tickets = Ticket::query()
+            ->with(['user', 'status']);
+
+        if (isset($request->priority))
+            $tickets->wherePriority($request->priority);
+
+        if (isset($request->service_id))
+            $tickets->whereInvitedAt($request->service_id);
+
+        if (isset($request->status_id))
+            $tickets->whereStatusId($request->status_id);
+
+        if (isset($request->user_id))
+            $tickets->whereuserId($request->user_id);
+
+        if (isset($request->created_at))
+            $tickets->whereInvitedAt($request->created_at);
+
+        if (isset($request->invited_at))
+            $tickets->whereInvitedAt($request->invited_at);
+
+        if (isset($request->completed_at))
+            $tickets->whereCompletedAt($request->completed_at);
+
+        if (isset($request->client_id))
+            $tickets->whereClientId($request->client_id);
+
+        if (isset($request->monitor_group_id))
+            $tickets->whereMonitorGroupId($request->monitor_group_id);
+
 
         return response()->json([
-            'tickets' => $tickets,
+            'tickets' => $tickets->paginate(10),
         ] , 200);
     }
 
-    public function getById(int $id, Request $request): JsonResponse
+    public function getById(int $id): JsonResponse
     {
         return response()->json([
             Ticket::whereId($id)->firstOrFail()
-        ] , 200);
-    }
-
-    public function getByStatusId(int $statusId, Request $request): JsonResponse
-    {
-        return response()->json([
-            Ticket::whereStatusId($statusId)->firstOrFail()
-        ] , 200);
-    }
-
-    public function getByUserId(int $userId, Request $request): JsonResponse
-    {
-        return response()->json([
-            Ticket::whereUserId($userId)->firstOrFail()
         ] , 200);
     }
 
