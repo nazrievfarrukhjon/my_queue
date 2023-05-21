@@ -14,7 +14,8 @@ class TicketStoreFormRequest extends FormRequest
             'service_id' => 'required|integer',
             'monitor_group_name' => 'required|string',
             'user_id' => 'required',
-            "created_at" => 'required'
+            "created_at" => 'required',
+            "monitor_group_id" => "required"
         ];
     }
 }

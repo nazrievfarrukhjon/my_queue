@@ -16,9 +16,9 @@ class TicketsController extends Controller
    public function create(TicketStoreFormRequest $request): JsonResponse
    {
        $client = Client::where('phone', $request->phone)->firstOrFail();
-       $service = Service::find($request->service_id);
+       $service = Service::whereId($request->service_id)->firstOrFail();
 
-       $monitorGroup = MonitorGroups::where('name', $request->monitor_group_name)->firstOrFail();
+       $monitorGroup = MonitorGroups::whereId($request->monitor_group_id)->firstOrFail();
        $monitorGroup->queue_number++;
        $monitorGroup->save();
 
@@ -53,23 +53,25 @@ class TicketsController extends Controller
 
     public function getAll(Request $request): JsonResponse
     {
+        $relations = $request->relations;
+
         $tickets = Ticket::query()
-            ->with(['user', 'status']);
+            ->with($relations);
 
         if (isset($request->priority))
             $tickets->wherePriority($request->priority);
 
         if (isset($request->service_id))
-            $tickets->whereInvitedAt($request->service_id);
+            $tickets->whereServiceId($request->service_id);
 
         if (isset($request->status_id))
             $tickets->whereStatusId($request->status_id);
 
         if (isset($request->user_id))
-            $tickets->whereuserId($request->user_id);
+            $tickets->whereUserId($request->user_id);
 
         if (isset($request->created_at))
-            $tickets->whereInvitedAt($request->created_at);
+            $tickets->whereCreatedAt($request->created_at);
 
         if (isset($request->invited_at))
             $tickets->whereInvitedAt($request->invited_at);

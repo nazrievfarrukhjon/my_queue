@@ -32,7 +32,7 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('client_id')->references('id')->on('clients');
 
-            $table->foreignId('monitor_group_id')->index();
+            $table->foreignId('monitor_group_id')->references('id')->on('monitor_groups');;
         });
     }
 
