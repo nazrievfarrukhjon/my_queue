@@ -14,7 +14,7 @@ use App\Http\Controllers\Api\Admin\{CabinetController,
     ServiceCategoryController,
     ServicesController,
     UsersController};
-use App\Http\Controllers\Api\{AuthController, MonitorController, ServiceCenterController};
+use App\Http\Controllers\Api\{AuthController, MonitorController, ServiceCenterController, TicketsController};
 
 Route::get('/', function () {
     return 'Queue system service';
@@ -84,19 +84,27 @@ Route::namespace('Api')->group(function () {
         Route::put('/service-centers/{serviceCenter}', [ServiceCenterController::class, 'update']);
         Route::delete('/service-centers/{serviceCenter}', [ServiceCenterController::class, 'destroy']);
 
-    });
-    Route::post('/terminals/register', [\App\Http\Controllers\TerminalController::class, 'register']);
+        //device registration
+        Route::post('/device/register', [\App\Http\Controllers\DeviceController::class, 'register']);
 
-    Route::middleware('auth_terminal')->group(function() {
+        //tickets
+        Route::put('/{id}', [TicketsController::class, 'update']);
+        Route::delete('/{id}', [TicketsController::class, 'delete']);
+        Route::get('/', [TicketsController::class, 'getAll']);
+        Route::get('/{id}', [TicketsController::class, 'getById']);
+        Route::get('/{status_id}', [TicketsController::class, 'getByStatusId']);
+        Route::get('/{user_id}', [TicketsController::class, 'getByUserId']);
+    });
+
+    Route::middleware('auth_device')->group(function() {
         Route::prefix('/monitors')->group(function () {
             Route::get('/', [MonitorController::class, 'index']);
 
             Route::get('/', [MonitorController::class, 'getByMonitorId']);
-
         });
 
         Route::prefix('/tickets')->group(function () {
-            Route::post('/', [\App\Http\Controllers\Api\TicketsController::class, 'create']);
+            Route::post('/', [TicketsController::class, 'create']);
         });
     });
 

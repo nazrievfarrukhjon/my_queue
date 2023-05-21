@@ -13,6 +13,8 @@ class TicketStoreFormRequest extends FormRequest
             'phone' => 'required|numeric',
             'service_id' => 'required|integer',
             'monitor_group_name' => 'required|string',
+            'user_id' => 'required',
+            "created_at" => 'required'
         ];
     }
 }

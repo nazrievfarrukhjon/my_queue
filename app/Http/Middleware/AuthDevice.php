@@ -2,22 +2,22 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Terminal;
+use App\Models\Device;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpFoundation\Response;
 
-class AuthTerminal
+class AuthDevice
 {
     public function handle(Request $request, Closure $next): Response
     {
-        $staticToken = Cache::get($request->terminal_uuid);
+        $staticToken = Cache::get($request->device_uuid);
 
         if (!$staticToken) {
-            $terminal = Terminal::where('terminal_uuid', $request->terminal_uuid)->first();
-            $staticToken = $terminal?->token;
-            Cache::forever('terminal_uuid', $staticToken);
+            $device = Device::where('device_uuid', $request->device_uuid)->first();
+            $staticToken = $device?->token;
+            Cache::forever('device_uuid', $staticToken);
         }
 
         $token = $request->header('Authorization');

@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Admin;
 
 
+use App\Enums\Status;
 use App\Http\Controllers\Controller;
 use App\Models\ServiceCategory;
 use App\Models\Service;
@@ -40,17 +41,17 @@ class CabinetController extends Controller
 
         $tickets = Ticket::with(['status', 'user', 'client'])
             ->where('created_at', '>=', Carbon::parse($today))
-            ->whereIn('status_id', [1, 2])
+            ->whereIn('status_id', [Status::pending->value, Status::invited->value])
             ->where('user_id', $user->id)
             ->get();
 
         $ticket = $user->tickets()->where('created_at', '>=', Carbon::parse($today))
-            ->where('status_id', 2)
+            ->where('status_id', Status::invited->value)
             ->with(['status', 'user', 'client'])
             ->first();
 
         $completedTickets = Ticket::where('created_at', '>=', Carbon::parse($today))
-            ->where('status_id', 3)
+            ->where('status_id', Status::active->value)
             ->where('user_id', $user->id)
             ->with(['status', 'client'])
             ->orderBy('completed_at', 'desc')
@@ -86,13 +87,13 @@ class CabinetController extends Controller
 
         $tickets = Ticket::with(['status', 'user', 'client'])
             ->where('created_at', '>=', Carbon::parse($today))
-            ->whereIn('status_id', [1])
+            ->whereIn('status_id', [Status::pending->value])
             ->where('user_id', $user->id)
             ->get();
 
         if (count($tickets) > 0) {
             $currentTicket = $tickets->first();
-            $currentTicket->status_id = 2;
+            $currentTicket->status_id = Status::invited->value;
             $currentTicket->user_id = $user->id;
             $currentTicket->invited_at = Carbon::now();
             $currentTicket->save();
@@ -109,7 +110,7 @@ class CabinetController extends Controller
     public function done(Request $request)
     {
         $ticket = Ticket::find($request->input('ticketId'));
-        $ticket->status_id = 3;
+        $ticket->status_id = Status::active->value;
         $ticket->completed_at = Carbon::now();
         $ticket->save();
 

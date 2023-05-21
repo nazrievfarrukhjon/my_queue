@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Terminal extends Model
+class Device extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'terminal_uuid',
+        'device_uuid',
         'name',
         'token',
     ];

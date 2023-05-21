@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 
+use App\Enums\Status;
 use App\Http\Controllers\Controller;
 use App\Models\Ticket;
 use Illuminate\Contracts\Foundation\Application;
@@ -17,7 +18,7 @@ class MonitorController extends Controller
     {
         $tickets = Ticket::query()
             ->with(['user', 'status'])
-            ->where('status', 2)
+            ->where('status_id', Status::invited->value)
             ->whereNotNull('invited_at')
             ->get();
 
@@ -27,7 +28,7 @@ class MonitorController extends Controller
     public function getByMonitorId(Request $request)
     {
         $tickets = Ticket::query()
-            ->where('monitor_id', $request->monitor_id)
+            ->where('monitor_group_id', $request->monitor_group_id)
             ->get();
 
         return $this->response($tickets);

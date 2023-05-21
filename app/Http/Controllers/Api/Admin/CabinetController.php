@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Admin;
 
+use App\Enums\Status;
 use App\Http\Controllers\Controller;
 use App\Models\Service;
 use App\Models\Ticket;
@@ -135,7 +136,7 @@ class CabinetController extends Controller
     public function saveTicket(Request $request)
     {
         $ticket = Ticket::find($request->input('ticket_id'));
-        $ticket->status_id = 3;
+        $ticket->status_id = Status::active->value;
         $ticket->completed_at = Carbon::now();
         $ticket->service_id = $request->data['service_id'];
         $ticket->comment = $request->data['comment'];

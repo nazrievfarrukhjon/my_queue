@@ -6,16 +6,23 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
-        Schema::create('terminals', function (Blueprint $table) {
-            $table->uuid('terminal_uuid')->unique();
+        Schema::create('devices', function (Blueprint $table) {
+            $table->uuid('device_uuid')->unique();
             $table->string('token');
+            $table->string('type', 50)->nullable();
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
-        Schema::dropIfExists('terminals');
+        Schema::dropIfExists('devices');
     }
 };
