@@ -24,7 +24,7 @@ class TicketObserver
 
     private function runEvent($ticket)
     {
-        $tickets = Ticket::where('monitor_group_id', $ticket->monitor_group_id)->limit(5)->get();
+        $tickets = Ticket::where('monitor_group_id', $ticket->monitor_group_id)->limit(7)->get();
         event(new TicketTriggered($tickets));
     }
 
